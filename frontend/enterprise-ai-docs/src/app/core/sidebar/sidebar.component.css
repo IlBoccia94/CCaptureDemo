@@ -23,3 +23,15 @@ a:hover {
   color: var(--text-primary);
   background-color: var(--bg-2);
 }
+
+@media (max-width: 900px) {
+  nav {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  a {
+    margin-bottom: 0;
+  }
+}

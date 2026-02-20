@@ -1,4 +1,61 @@
-<section>
-  <h1>Upload</h1>
-  <p>Scaffold placeholder for drag-and-drop upload queue and preview panel.</p>
+<section class="page-shell">
+  <header>
+    <h1>Upload Documents</h1>
+    <p>Drop files into the secure intake zone and trigger AI extraction workflows.</p>
+  </header>
+
+  <div class="grid">
+    <article
+      class="upload-zone"
+      [class.dragging]="isDragging"
+      (drop)="onFileDrop($event)"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave()">
+      <h2>Drag & Drop Multi File Upload</h2>
+      <p>Supported formats: PDF, JPG, PNG, TIFF</p>
+      <label class="upload-button">
+        Choose Files
+        <input type="file" multiple (change)="onFileInput($event)" />
+      </label>
+    </article>
+
+    <article class="preview-panel">
+      <h2>File Preview</h2>
+      @if (selectedPreviewFile) {
+        <div class="preview-card">
+          <strong>{{ selectedPreviewFile.name }}</strong>
+          <span>{{ selectedPreviewFile.type || 'Unknown type' }}</span>
+          <span>{{ selectedPreviewFile.size / 1024 | number: '1.0-0' }} KB</span>
+        </div>
+      } @else {
+        <p class="muted">Select a file to view details.</p>
+      }
+    </article>
+  </div>
+
+  <article class="file-list-panel">
+    <h2>Queued Files</h2>
+    @if (queuedFiles.length === 0) {
+      <p class="muted">No files queued yet.</p>
+    } @else {
+      <ul>
+        @for (file of queuedFiles; track file.name + file.size) {
+          <li>
+            <button type="button" class="file-link" (click)="selectPreview(file)">{{ file.name }}</button>
+            <span>{{ file.size / 1024 | number: '1.0-0' }} KB</span>
+            <button type="button" class="remove" (click)="removeFile(file)">Remove</button>
+          </li>
+        }
+      </ul>
+    }
+  </article>
+
+  <div class="actions">
+    <button type="button" [disabled]="queuedFiles.length === 0 || isUploading" (click)="startProcessing()">
+      {{ isUploading ? 'Submitting...' : 'Start Processing' }}
+    </button>
+    @if (feedbackMessage) {
+      <p>{{ feedbackMessage }}</p>
+    }
+  </div>
 </section>

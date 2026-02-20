@@ -4,6 +4,7 @@ import { MainLayoutComponent } from './core/layout/main-layout.component';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet, MainLayoutComponent],
   template: '<app-main-layout><router-outlet /></app-main-layout>'
 })
