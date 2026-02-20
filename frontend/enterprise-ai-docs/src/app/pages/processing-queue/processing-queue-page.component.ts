@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DocumentQueueItem } from '../../core/models/document.models';
 import { ProcessingStatusService } from '../../core/services/processing-status.service';
@@ -12,7 +12,7 @@ import { ProcessingStatusService } from '../../core/services/processing-status.s
   styleUrl: './processing-queue-page.component.css'
 })
 export class ProcessingQueuePageComponent {
-  readonly queueItems$: Observable<DocumentQueueItem[]> = this.processingStatusService.queue$;
+  private readonly processingStatusService = inject(ProcessingStatusService);
 
-  constructor(private readonly processingStatusService: ProcessingStatusService) {}
+  readonly queueItems$: Observable<DocumentQueueItem[]> = this.processingStatusService.queue$;
 }

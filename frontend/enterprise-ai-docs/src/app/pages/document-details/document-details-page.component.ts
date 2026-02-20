@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, map, of, switchMap } from 'rxjs';
 import { DocumentDetails, DocumentImage, ExtractedMetadata } from '../../core/models/document.models';
@@ -19,6 +19,10 @@ interface ImageFlowItem {
   styleUrl: './document-details-page.component.css'
 })
 export class DocumentDetailsPageComponent {
+  private readonly route = inject(ActivatedRoute);
+  private readonly documentRetrievalService = inject(DocumentRetrievalService);
+  private readonly processingStatusService = inject(ProcessingStatusService);
+
   readonly details$ = this.route.paramMap.pipe(
     map((params) => params.get('id')),
     switchMap((id) => {
@@ -35,11 +39,6 @@ export class DocumentDetailsPageComponent {
     })
   );
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly documentRetrievalService: DocumentRetrievalService,
-    private readonly processingStatusService: ProcessingStatusService
-  ) {}
 
   toFlowItems(details: DocumentDetails): ImageFlowItem[] {
     return details.images.map((image) => ({
