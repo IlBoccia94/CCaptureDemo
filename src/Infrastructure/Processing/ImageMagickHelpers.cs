@@ -8,11 +8,11 @@ internal static class ImageMagickHelpers
     public static Task CropAsync(string sourcePath, string outputPath, BoundingBox box, CancellationToken cancellationToken)
     {
         using var image = new MagickImage(sourcePath);
-        var x = (int)Math.Max(0, box.X);
-        var y = (int)Math.Max(0, box.Y);
-        var width = (int)Math.Min(image.Width - x, box.Width);
-        var height = (int)Math.Min(image.Height - y, box.Height);
-        image.Crop(new MagickGeometry(x, y, Math.Max(1, width), Math.Max(1, height)));
+        var x = (uint)Math.Max(0, box.X);
+        var y = (uint)Math.Max(0, box.Y);
+        var width = (uint)Math.Max(1, Math.Min((int)(image.Width - x), box.Width));
+        var height = (uint)Math.Max(1, Math.Min((int)(image.Height - y), box.Height));
+        image.Crop(new MagickGeometry(x, y, width, height));
         image.Write(outputPath);
         return Task.CompletedTask;
     }

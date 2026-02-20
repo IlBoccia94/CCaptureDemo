@@ -44,7 +44,7 @@ public sealed class ImagePreparationService(IStorageService storageService) : II
 
     private static void ResizeToMaxSize(MagickImage image)
     {
-        var quality = 90;
+        uint quality = 90;
         while (true)
         {
             image.Quality = quality;
@@ -57,7 +57,9 @@ public sealed class ImagePreparationService(IStorageService storageService) : II
             }
 
             quality -= 10;
-            image.Resize((int)(image.Width * 0.9), (int)(image.Height * 0.9));
+            var width = Math.Max(1U, (uint)(image.Width * 0.9));
+            var height = Math.Max(1U, (uint)(image.Height * 0.9));
+            image.Resize(width, height);
         }
     }
 }
