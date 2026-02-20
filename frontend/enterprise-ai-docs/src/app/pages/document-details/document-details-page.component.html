@@ -1,5 +1,42 @@
-<section>
-  <h1>Document Details</h1>
-  <p>Scaffold placeholder for extracted entities and classification graph.</p>
-  <small>Document Id: {{ documentId }}</small>
+<section class="details-shell">
+  @if (details$ | async; as details) {
+    <header class="document-header">
+      <div class="file-icon">{{ details.fileName.split('.').at(-1)?.toUpperCase() || 'FILE' }}</div>
+      <div>
+        <h1>{{ details.fileName }}</h1>
+        <p>Status: {{ details.status }} · Completed: {{ details.processingCompletedAtUtc | date: 'medium' }}</p>
+      </div>
+    </header>
+
+    <h2>Processing Flow Diagram</h2>
+    <div class="flow-grid">
+      @for (item of toFlowItems(details); track item.image.id) {
+        <article class="flow-card">
+          <h3>Page {{ item.image.pageNumber }} - {{ item.image.label }}</h3>
+          <div class="previews">
+            <figure>
+              <img [src]="item.image.croppedPath" alt="Cropped image preview" />
+              <figcaption>Preview</figcaption>
+            </figure>
+            <figure>
+              <img [src]="item.image.overlayPath" alt="Overlay bounding box" />
+              <figcaption>Overlay Bounding Box</figcaption>
+            </figure>
+          </div>
+          <p><strong>Classification:</strong> {{ item.image.label }} ({{ item.image.detectionScore | percent: '1.0-0' }})</p>
+          <div class="metadata">
+            <h4>Extracted Metadata</h4>
+            @for (meta of item.metadata; track meta.fieldName + meta.fieldValue) {
+              <div class="meta-row">
+                <span>{{ meta.fieldName }}</span>
+                <span>{{ meta.fieldValue }}</span>
+              </div>
+            } @empty {
+              <p class="muted">No metadata available.</p>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  }
 </section>

@@ -1,1 +1,111 @@
-section { background: var(--bg-1); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; }
+.page-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+header p,
+.muted {
+  color: var(--text-muted);
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.upload-zone,
+.preview-panel,
+.file-list-panel {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.upload-zone {
+  border-style: dashed;
+}
+
+.upload-zone.dragging {
+  border-color: var(--accent);
+  background: #14233a;
+}
+
+.upload-button {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--bg-2);
+}
+
+.upload-button input {
+  display: none;
+}
+
+.preview-card {
+  background: var(--bg-2);
+  border-radius: 10px;
+  padding: 0.75rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.65rem;
+  align-items: center;
+  background: var(--bg-2);
+  padding: 0.7rem;
+  border-radius: 8px;
+}
+
+.file-link,
+.remove,
+.actions button {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+}
+
+.file-link {
+  text-align: left;
+  cursor: pointer;
+}
+
+.remove {
+  color: #ff7b87;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.actions button {
+  background: var(--accent);
+  color: #041522;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.7rem 1.1rem;
+  cursor: pointer;
+}
+
+.actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

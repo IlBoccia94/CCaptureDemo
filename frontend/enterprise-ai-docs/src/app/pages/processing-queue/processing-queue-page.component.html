@@ -1,4 +1,38 @@
-<section>
-  <h1>Processing Queue</h1>
-  <p>Scaffold placeholder for processing status table and progress tracking.</p>
+<section class="queue-shell">
+  <header>
+    <h1>Processing Queue</h1>
+    <p>Real-time status monitor for submitted document workloads.</p>
+  </header>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Document Name</th>
+          <th>Status</th>
+          <th>Submission Time</th>
+          <th>Progress</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of queueItems$ | async; track item.id) {
+          <tr>
+            <td>{{ item.documentName }}</td>
+            <td><span class="status" [class]="'status ' + item.status.toLowerCase()">{{ item.status }}</span></td>
+            <td>{{ item.submissionTime | date: 'medium' }}</td>
+            <td>
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="item.progress"></div>
+              </div>
+              <small>{{ item.progress }}%</small>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="empty">No queued documents yet. Upload files to start processing.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 </section>

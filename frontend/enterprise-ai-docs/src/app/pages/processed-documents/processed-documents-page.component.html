@@ -1,4 +1,19 @@
-<section>
-  <h1>Processed Documents</h1>
-  <p>Scaffold placeholder for processed document cards and detail links.</p>
+<section class="processed-shell">
+  <header>
+    <h1>Processed Documents</h1>
+    <p>Completed outputs ready for inspection and metadata verification.</p>
+  </header>
+
+  <div class="cards">
+    @for (doc of completedDocuments$ | async; track doc.id) {
+      <article class="card">
+        <div class="file-type">{{ doc.fileType }}</div>
+        <h2>{{ doc.documentName }}</h2>
+        <p>Processed on {{ doc.submissionTime | date: 'mediumDate' }}</p>
+        <a [routerLink]="['/documents', doc.id]">View Details</a>
+      </article>
+    } @empty {
+      <p class="empty">No completed documents yet.</p>
+    }
+  </div>
 </section>
