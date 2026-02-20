@@ -1,7 +1,6 @@
 using Application.DocumentProcessing.Interfaces;
 using Domain.Enums;
 using Infrastructure.Configuration;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Processing;
@@ -10,9 +9,9 @@ public sealed class StorageService(IOptions<StorageOptions> options) : IStorageS
 {
     private readonly StorageOptions _options = options.Value;
 
-    public async Task<(string StoredPath, DocumentType FileType, string StoredFileName)> SaveOriginalAsync(IFormFile file, CancellationToken cancellationToken)
+    public async Task<(string StoredPath, DocumentType FileType, string StoredFileName)> SaveOriginalAsync(Stream fileStream, string fileName, CancellationToken cancellationToken)
     {
-        var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        var extension = Path.GetExtension(fileName).ToLowerInvariant();
         var type = extension switch
         {
             ".pdf" => DocumentType.Pdf,
@@ -26,7 +25,7 @@ public sealed class StorageService(IOptions<StorageOptions> options) : IStorageS
         var fullPath = Path.Combine(_options.RootPath, safeName);
 
         await using var stream = File.Create(fullPath);
-        await file.CopyToAsync(stream, cancellationToken);
+        await fileStream.CopyToAsync(stream, cancellationToken);
 
         return (fullPath, type, safeName);
     }

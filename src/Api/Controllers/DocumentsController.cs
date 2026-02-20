@@ -26,7 +26,8 @@ public sealed class DocumentsController(
             return BadRequest("Missing file.");
         }
 
-        var (path, type, storedFileName) = await storageService.SaveOriginalAsync(file, cancellationToken);
+        await using var fileStream = file.OpenReadStream();
+        var (path, type, storedFileName) = await storageService.SaveOriginalAsync(fileStream, file.FileName, cancellationToken);
         var document = new Document(storedFileName, path, type);
         document.MarkQueued();
 
