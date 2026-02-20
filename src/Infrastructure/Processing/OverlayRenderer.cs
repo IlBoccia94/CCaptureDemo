@@ -1,6 +1,7 @@
 using Application.DocumentProcessing.Dtos;
 using Application.DocumentProcessing.Interfaces;
 using ImageMagick;
+using ImageMagick.Drawing;
 
 namespace Infrastructure.Processing;
 
@@ -19,10 +20,10 @@ public sealed class OverlayRenderer : IOverlayRenderer
         foreach (var field in fields.Where(f => f.BoundingBox is not null))
         {
             var box = field.BoundingBox!;
-            drawables.Add(new DrawableRectangle(box.X, box.Y, box.X + box.Width, box.Y + box.Height));
+            drawables.Add(new DrawableRectangle((double)box.X, (double)box.Y, (double)(box.X + box.Width), (double)(box.Y + box.Height)));
             drawables.Add(new DrawableFillColor(MagickColors.Lime));
             drawables.Add(new DrawableFontPointSize(18));
-            drawables.Add(new DrawableText(box.X + 2, Math.Max(20, box.Y - 4), field.Name));
+            drawables.Add(new DrawableText((double)(box.X + 2), (double)Math.Max(20, box.Y - 4), field.Name));
             drawables.Add(new DrawableFillColor(MagickColors.Transparent));
         }
 

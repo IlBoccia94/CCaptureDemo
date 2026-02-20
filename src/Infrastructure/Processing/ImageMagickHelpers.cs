@@ -12,7 +12,7 @@ internal static class ImageMagickHelpers
         var y = (uint)Math.Max(0, box.Y);
         var width = (uint)Math.Max(1, Math.Min((int)(image.Width - x), box.Width));
         var height = (uint)Math.Max(1, Math.Min((int)(image.Height - y), box.Height));
-        image.Crop(new MagickGeometry(x, y, width, height));
+        image.Crop(new MagickGeometry((int)x, (int)y, width, height));
         image.Write(outputPath);
         return Task.CompletedTask;
     }

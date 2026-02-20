@@ -1,5 +1,6 @@
 using Application.Common.Interfaces;
 using Application.DocumentProcessing.Interfaces;
+using Asp.Versioning;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 

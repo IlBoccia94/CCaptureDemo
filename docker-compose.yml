@@ -6,7 +6,7 @@ services:
     container_name: enterprise-ai-api
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__PostgreSql: Host=postgres;Port=5432;Database=enterprise_ai_docs;Username=postgres;Password=postgres
+      ConnectionStrings__PostgreSql: Host=34.91.137.209;Port=5432;Database=ccapture_demo_app;Username=postgres;Password=postgres
     ports:
       - "8080:8080"
     depends_on:

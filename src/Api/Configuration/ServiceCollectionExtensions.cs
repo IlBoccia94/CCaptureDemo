@@ -1,4 +1,7 @@
 using Asp.Versioning;
+using Microsoft.Extensions.DependencyInjection; // già incluso implicitamente
+using Microsoft.Extensions.Configuration; // già incluso implicitamente
+using Swashbuckle.AspNetCore.SwaggerGen; // <--- Questo è quello mancante
 
 namespace Api.Configuration;
 
