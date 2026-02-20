@@ -1,0 +1,8 @@
+<aside class="sidebar-root">
+  <div class="brand">Enterprise AI Document Processing</div>
+  <nav>
+    @for (item of navItems; track item.route) {
+      <a [routerLink]="item.route" routerLinkActive="active">{{ item.label }}</a>
+    }
+  </nav>
+</aside>
