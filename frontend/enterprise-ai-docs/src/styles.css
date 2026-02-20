@@ -1,0 +1,21 @@
+:root {
+  color-scheme: dark;
+  --bg-0: #0b1220;
+  --bg-1: #111b2f;
+  --bg-2: #1a2740;
+  --text-primary: #e3ebff;
+  --text-muted: #a8bad8;
+  --border: #2b3f63;
+  --accent: #31d0b9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+  background: radial-gradient(circle at top right, #172845, var(--bg-0));
+  color: var(--text-primary);
+}
