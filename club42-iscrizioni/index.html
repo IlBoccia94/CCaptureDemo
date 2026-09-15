@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Club42 · Gestione iscrizioni</title>
+  <style>
+    :root{
+      --bg:#0b1220;--panel:#111827;--panel-2:#172033;--line:#263249;--text:#f8fafc;--muted:#94a3b8;
+      --accent:#f59e0b;--accent-2:#fb7185;--ok:#22c55e;--warn:#f97316;--danger:#ef4444;--info:#38bdf8;
+      --shadow:0 18px 45px rgba(0,0,0,.22);--radius:18px
+    }
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top right,#1f2a44 0,#0b1220 40%,#070b13 100%);color:var(--text);min-height:100vh}
+    button,input,select,textarea{font:inherit}button{cursor:pointer}
+    .app{min-height:100vh;display:grid;grid-template-columns:270px 1fr}.sidebar{border-right:1px solid var(--line);padding:24px 18px;display:flex;flex-direction:column;gap:18px;background:rgba(8,13,23,.78);backdrop-filter:blur(16px);position:sticky;top:0;height:100vh}
+    .brand{display:flex;align-items:center;gap:12px;padding:4px 6px 12px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;color:#111827;font-weight:900;font-size:20px;box-shadow:0 10px 30px rgba(245,158,11,.22)}
+    .brand h1{font-size:18px;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:12px}.nav{display:grid;gap:8px}.nav button{border:1px solid transparent;background:transparent;color:var(--muted);padding:12px 14px;border-radius:12px;text-align:left;display:flex;gap:10px;align-items:center}.nav button.active,.nav button:hover{background:var(--panel-2);color:var(--text);border-color:var(--line)}
+    .side-note{margin-top:auto;padding:14px;border:1px solid var(--line);border-radius:14px;color:var(--muted);font-size:12px;line-height:1.5;background:rgba(17,24,39,.65)}
+    .main{padding:28px;max-width:1500px;width:100%;margin:0 auto}.topbar{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:22px}.topbar h2{margin:0;font-size:30px;letter-spacing:-.03em}.topbar p{color:var(--muted);margin:6px 0 0}.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .btn{border:none;border-radius:12px;padding:11px 14px;font-weight:700;background:var(--panel-2);color:var(--text);border:1px solid var(--line)}.btn:hover{filter:brightness(1.08)}.btn.primary{background:linear-gradient(135deg,var(--accent),#fbbf24);color:#111827;border-color:transparent}.btn.danger{background:rgba(239,68,68,.12);color:#fecaca;border-color:rgba(239,68,68,.3)}
+    .grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}.card{background:rgba(17,24,39,.82);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.stat{padding:18px}.stat .label{color:var(--muted);font-size:13px}.stat .value{font-size:30px;font-weight:800;margin-top:5px}.stat .hint{font-size:12px;margin-top:3px;color:var(--muted)}
+    .layout{grid-template-columns:minmax(0,1fr) 360px}.panel{padding:18px}.panel h3{margin:0 0 14px;font-size:18px}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}.toolbar .search{flex:1;min-width:200px}
+    input,select,textarea{width:100%;background:#0b1323;border:1px solid var(--line);color:var(--text);border-radius:11px;padding:10px 12px;outline:none}input:focus,select:focus,textarea:focus{border-color:#64748b}.field{display:grid;gap:6px}.field label{font-size:12px;color:var(--muted);font-weight:700}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-grid .full{grid-column:1/-1}
+    .events{display:grid;gap:10px}.event-card{padding:14px;border:1px solid var(--line);border-radius:14px;background:#0c1424;display:grid;gap:8px}.event-card.active{border-color:rgba(245,158,11,.65);box-shadow:inset 0 0 0 1px rgba(245,158,11,.18)}.event-head{display:flex;justify-content:space-between;gap:12px}.event-title{font-weight:800}.event-meta{font-size:12px;color:var(--muted);line-height:1.45}.progress{height:8px;border-radius:999px;background:#1e293b;overflow:hidden}.progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2))}.small-actions{display:flex;gap:7px}.icon-btn{border:1px solid var(--line);background:#121c2d;color:var(--text);border-radius:9px;padding:7px 9px}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}table{width:100%;border-collapse:collapse;min-width:880px;background:#0c1424}th,td{padding:12px 11px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}th{color:#cbd5e1;background:#111a2b;position:sticky;top:0}tr:last-child td{border-bottom:none}.muted{color:var(--muted)}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800;border:1px solid transparent}.badge.ok{color:#bbf7d0;background:rgba(34,197,94,.11);border-color:rgba(34,197,94,.25)}.badge.warn{color:#fed7aa;background:rgba(249,115,22,.11);border-color:rgba(249,115,22,.25)}.badge.wait{color:#bae6fd;background:rgba(56,189,248,.11);border-color:rgba(56,189,248,.25)}.badge.off{color:#cbd5e1;background:rgba(148,163,184,.1);border-color:rgba(148,163,184,.2)}
+    .empty{padding:28px;text-align:center;color:var(--muted)}.section{display:none}.section.active{display:block}.split{display:flex;gap:10px}.split>*{flex:1}.footer-note{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5}
+    dialog{border:none;border-radius:18px;background:#111827;color:var(--text);padding:0;max-width:620px;width:calc(100% - 28px);box-shadow:0 30px 80px rgba(0,0,0,.55)}dialog::backdrop{background:rgba(2,6,23,.72);backdrop-filter:blur(4px)}.modal{padding:20px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.modal-head h3{margin:0}.close{border:none;background:transparent;color:var(--muted);font-size:24px}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+    .toast{position:fixed;right:22px;bottom:22px;background:#111827;border:1px solid var(--line);box-shadow:var(--shadow);padding:12px 14px;border-radius:12px;opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s;z-index:50}.toast.show{opacity:1;transform:none}.kpi-list{display:grid;gap:10px}.kpi-row{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px solid var(--line)}.kpi-row:last-child{border:none}
+    .mobile-nav{display:none}
+    @media(max-width:1100px){.stats{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.sidebar{display:none}.app{display:block}.main{padding:18px 14px 84px}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:rgba(8,13,23,.94);backdrop-filter:blur(14px);border-top:1px solid var(--line);z-index:20;padding:8px}.mobile-nav button{flex:1;border:none;background:transparent;color:var(--muted);padding:10px 4px;font-size:12px}.mobile-nav button.active{color:var(--accent)}}
+    @media(max-width:680px){.stats{grid-template-columns:1fr 1fr}.stat .value{font-size:25px}.topbar{flex-direction:column}.actions{justify-content:flex-start}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.main{padding-top:18px}.topbar h2{font-size:25px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">42</div><div><h1>Club42</h1><p>Gestione iscrizioni</p></div></div>
+    <nav class="nav">
+      <button class="active" data-view="dashboard">◫ Dashboard</button>
+      <button data-view="events">◉ Eventi</button>
+      <button data-view="people">◎ Iscritti</button>
+      <button data-view="backup">↥ Backup & export</button>
+    </nav>
+    <div class="side-note">Versione locale: i dati sono salvati nel browser di questo dispositivo. Fai un backup JSON periodico per non perderli.</div>
+  </aside>
+
+  <main class="main">
+    <section id="dashboard" class="section active">
+      <div class="topbar"><div><h2>Dashboard</h2><p>Una vista rapida delle iscrizioni Club42.</p></div><div class="actions"><button class="btn" id="quickAddPerson">+ Iscritto</button><button class="btn primary" id="quickAddEvent">+ Nuovo evento</button></div></div>
+      <div class="grid stats">
+        <div class="card stat"><div class="label">Eventi attivi</div><div class="value" id="statEvents">0</div><div class="hint">in archivio</div></div>
+        <div class="card stat"><div class="label">Iscrizioni</div><div class="value" id="statPeople">0</div><div class="hint">totali</div></div>
+        <div class="card stat"><div class="label">Pagamenti ricevuti</div><div class="value" id="statPaid">0</div><div class="hint">iscritti segnati pagati</div></div>
+        <div class="card stat"><div class="label">Soci Club42</div><div class="value" id="statMembers">0</div><div class="hint">tessera attiva</div></div>
+      </div>
+      <div class="grid layout">
+        <div class="card panel"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><h3>Eventi</h3><button class="btn" id="dashNewEvent">Nuovo</button></div><div class="events" id="dashboardEvents"></div></div>
+        <div class="card panel"><h3>Riepilogo evento selezionato</h3><div class="kpi-list" id="eventSummary"></div></div>
+      </div>
+    </section>
+
+    <section id="events" class="section">
+      <div class="topbar"><div><h2>Eventi</h2><p>Crea eventi e controlla capienza e iscrizioni.</p></div><div class="actions"><button class="btn primary" id="eventsNewEvent">+ Nuovo evento</button></div></div>
+      <div class="card panel"><div class="events" id="eventsList"></div></div>
+    </section>
+
+    <section id="people" class="section">
+      <div class="topbar"><div><h2>Iscritti</h2><p>Gestisci le persone collegate all'evento selezionato.</p></div><div class="actions"><button class="btn primary" id="peopleAdd">+ Aggiungi iscritto</button></div></div>
+      <div class="card panel">
+        <div class="toolbar">
+          <select id="peopleEventFilter" style="max-width:330px"></select>
+          <input class="search" id="peopleSearch" placeholder="Cerca nome, telefono, email..." />
+          <select id="statusFilter" style="max-width:180px"><option value="all">Tutti gli stati</option><option value="confirmed">Confermati</option><option value="waitlist">Lista d'attesa</option><option value="cancelled">Annullati</option></select>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Nome</th><th>Contatti</th><th>Stato</th><th>Tessera</th><th>Pagamento</th><th>Note</th><th></th></tr></thead><tbody id="peopleTable"></tbody></table></div>
+      </div>
+    </section>
+
+    <section id="backup" class="section">
+      <div class="topbar"><div><h2>Backup & export</h2><p>Porta i dati con te o esportali per Excel/Google Sheets.</p></div></div>
+      <div class="grid layout">
+        <div class="card panel"><h3>Esporta</h3><p class="muted">Scarica tutti i dati in JSON oppure gli iscritti dell'evento selezionato in CSV.</p><div class="actions" style="justify-content:flex-start;margin-top:16px"><button class="btn primary" id="exportJson">Scarica backup JSON</button><button class="btn" id="exportCsv">Esporta CSV</button></div></div>
+        <div class="card panel"><h3>Importa backup</h3><p class="muted">Ripristina un backup JSON generato da questa app. L'importazione sostituisce i dati attuali.</p><input id="importFile" type="file" accept="application/json" style="margin-top:12px" /><button class="btn danger" id="resetData" style="margin-top:12px">Azzera tutti i dati</button></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="mobile-nav"><button class="active" data-view="dashboard">Dashboard</button><button data-view="events">Eventi</button><button data-view="people">Iscritti</button><button data-view="backup">Backup</button></nav>
+
+<dialog id="eventDialog"><form method="dialog" class="modal" id="eventForm"><div class="modal-head"><h3 id="eventDialogTitle">Nuovo evento</h3><button class="close" value="cancel" aria-label="Chiudi">×</button></div><div class="form-grid">
+  <div class="field full"><label>Nome evento *</label><input id="eventName" required /></div>
+  <div class="field"><label>Data *</label><input id="eventDate" type="date" required /></div>
+  <div class="field"><label>Ora</label><input id="eventTime" type="time" /></div>
+  <div class="field full"><label>Luogo</label><input id="eventPlace" /></div>
+  <div class="field"><label>Capienza</label><input id="eventCapacity" type="number" min="0" value="0" /></div>
+  <div class="field"><label>Quota (€)</label><input id="eventPrice" type="number" min="0" step="0.01" /></div>
+  <div class="field full"><label>Note</label><textarea id="eventNotes" rows="3"></textarea></div>
+</div><div class="modal-actions"><button class="btn" value="cancel">Annulla</button><button class="btn primary" id="saveEvent" value="default">Salva evento</button></div></form></dialog>
+
+<dialog id="personDialog"><form method="dialog" class="modal" id="personForm"><div class="modal-head"><h3 id="personDialogTitle">Aggiungi iscritto</h3><button class="close" value="cancel" aria-label="Chiudi">×</button></div><div class="form-grid">
+  <div class="field full"><label>Evento *</label><select id="personEvent" required></select></div>
+  <div class="field full"><label>Nome e cognome *</label><input id="personName" required /></div>
+  <div class="field"><label>Telefono</label><input id="personPhone" /></div><div class="field"><label>Email</label><input id="personEmail" type="email" /></div>
+  <div class="field"><label>Stato</label><select id="personStatus"><option value="confirmed">Confermato</option><option value="waitlist">Lista d'attesa</option><option value="cancelled">Annullato</option></select></div>
+  <div class="field"><label>Pagamento</label><select id="personPaid"><option value="no">Da pagare</option><option value="yes">Pagato</option></select></div>
+  <div class="field"><label>Tessera Club42</label><select id="personMember"><option value="no">No</option><option value="yes">Sì</option></select></div>
+  <div class="field"><label>Esigenze alimentari</label><input id="personDiet" placeholder="es. celiaco, vegetariano" /></div>
+  <div class="field full"><label>Note</label><textarea id="personNotes" rows="3"></textarea></div>
+</div><div class="modal-actions"><button class="btn" value="cancel">Annulla</button><button class="btn primary" id="savePerson" value="default">Salva iscritto</button></div></form></dialog>
+
+<div class="toast" id="toast"></div>
+<script>
+const STORAGE_KEY='club42_registration_manager_v1';
+const sample={events:[{id:'evt_astro_20260925',name:'Club42 x Astrofili · Monte Viseggi',date:'2026-09-25',time:'18:30',place:'Osservatorio astronomico di Monte Viseggi',capacity:60,price:'',notes:'Osservazione del Sole, apericena, domande agli esperti e osservazione finale.'}],people:[],selectedEventId:'evt_astro_20260925'};
+let state=loadState(); let editingEventId=null; let editingPersonId=null;
+function loadState(){try{const raw=localStorage.getItem(STORAGE_KEY);return raw?JSON.parse(raw):structuredClone(sample)}catch{return structuredClone(sample)}}
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));renderAll()}
+function uid(prefix){return prefix+'_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7)}
+function fmtDate(s){if(!s)return '—';const d=new Date(s+'T12:00:00');return new Intl.DateTimeFormat('it-IT',{day:'2-digit',month:'short',year:'numeric'}).format(d)}
+function esc(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function eventPeople(id){return state.people.filter(p=>p.eventId===id)}
+function confirmedCount(id){return eventPeople(id).filter(p=>p.status==='confirmed').length}
+function statusBadge(v){return v==='confirmed'?'<span class="badge ok">Confermato</span>':v==='waitlist'?'<span class="badge wait">Attesa</span>':'<span class="badge off">Annullato</span>'}
+function yesNoBadge(v,yesLabel,noLabel){return v==='yes'?`<span class="badge ok">${yesLabel}</span>`:`<span class="badge warn">${noLabel}</span>`}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}
+function selectedEvent(){return state.events.find(e=>e.id===state.selectedEventId)||state.events[0]||null}
+function renderAll(){renderStats();renderEvents();renderPeopleSelectors();renderPeople();renderSummary()}
+function renderStats(){document.getElementById('statEvents').textContent=state.events.length;document.getElementById('statPeople').textContent=state.people.filter(p=>p.status!=='cancelled').length;document.getElementById('statPaid').textContent=state.people.filter(p=>p.paid==='yes'&&p.status!=='cancelled').length;document.getElementById('statMembers').textContent=state.people.filter(p=>p.member==='yes'&&p.status!=='cancelled').length}
+function eventCard(e){const count=confirmedCount(e.id), cap=Number(e.capacity)||0, pct=cap?Math.min(100,Math.round(count/cap*100)):0, active=e.id===state.selectedEventId?' active':'';return `<div class="event-card${active}"><div class="event-head"><div><div class="event-title">${esc(e.name)}</div><div class="event-meta">${fmtDate(e.date)}${e.time?' · '+esc(e.time):''}${e.place?' · '+esc(e.place):''}</div></div><div class="small-actions"><button class="icon-btn" onclick="selectEvent('${e.id}')">Apri</button><button class="icon-btn" onclick="editEvent('${e.id}')">✎</button><button class="icon-btn" onclick="deleteEvent('${e.id}')">×</button></div></div><div class="event-meta">${count}${cap?' / '+cap:''} confermati${e.price!==''?' · € '+Number(e.price).toFixed(2):''}</div>${cap?`<div class="progress"><span style="width:${pct}%"></span></div>`:''}</div>`}
+function renderEvents(){const html=state.events.length?state.events.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(eventCard).join(''):'<div class="empty">Nessun evento. Creane uno per iniziare.</div>';document.getElementById('eventsList').innerHTML=html;document.getElementById('dashboardEvents').innerHTML=html}
+function renderSummary(){const e=selectedEvent(), el=document.getElementById('eventSummary');if(!e){el.innerHTML='<div class="empty">Seleziona o crea un evento.</div>';return}const pp=eventPeople(e.id),confirmed=pp.filter(p=>p.status==='confirmed'),wait=pp.filter(p=>p.status==='waitlist'),paid=confirmed.filter(p=>p.paid==='yes'),members=confirmed.filter(p=>p.member==='yes'),cap=Number(e.capacity)||0;el.innerHTML=`<div class="kpi-row"><span class="muted">Evento</span><strong>${esc(e.name)}</strong></div><div class="kpi-row"><span class="muted">Confermati</span><strong>${confirmed.length}${cap?' / '+cap:''}</strong></div><div class="kpi-row"><span class="muted">Lista d'attesa</span><strong>${wait.length}</strong></div><div class="kpi-row"><span class="muted">Pagati</span><strong>${paid.length} / ${confirmed.length}</strong></div><div class="kpi-row"><span class="muted">Soci</span><strong>${members.length} / ${confirmed.length}</strong></div><div class="kpi-row"><span class="muted">Esigenze alimentari</span><strong>${confirmed.filter(p=>p.diet&&p.diet.trim()).length}</strong></div>`}
+function renderPeopleSelectors(){const opts=state.events.map(e=>`<option value="${e.id}">${esc(e.name)}</option>`).join('');for(const id of ['peopleEventFilter','personEvent']){const el=document.getElementById(id);const old=el.value;el.innerHTML=opts||'<option value="">Nessun evento</option>';el.value=(old&&state.events.some(e=>e.id===old))?old:(state.selectedEventId||state.events[0]?.id||'')}}
+function renderPeople(){const eventId=document.getElementById('peopleEventFilter').value||state.selectedEventId;const q=document.getElementById('peopleSearch').value.toLowerCase().trim();const sf=document.getElementById('statusFilter').value;let list=state.people.filter(p=>p.eventId===eventId);if(sf!=='all')list=list.filter(p=>p.status===sf);if(q)list=list.filter(p=>[p.name,p.phone,p.email,p.notes,p.diet].some(v=>(v||'').toLowerCase().includes(q)));list.sort((a,b)=>a.name.localeCompare(b.name,'it'));document.getElementById('peopleTable').innerHTML=list.length?list.map(p=>`<tr><td><strong>${esc(p.name)}</strong>${p.diet?`<div class="muted" style="font-size:11px;margin-top:4px">🍽 ${esc(p.diet)}</div>`:''}</td><td>${p.phone?esc(p.phone):''}${p.phone&&p.email?'<br>':''}${p.email?esc(p.email):''}</td><td>${statusBadge(p.status)}</td><td>${yesNoBadge(p.member,'Socio','No')}</td><td>${yesNoBadge(p.paid,'Pagato','Da pagare')}</td><td class="muted">${esc(p.notes||'—')}</td><td><div class="small-actions"><button class="icon-btn" onclick="editPerson('${p.id}')">✎</button><button class="icon-btn" onclick="deletePerson('${p.id}')">×</button></div></td></tr>`).join(''):'<tr><td colspan="7" class="empty">Nessun iscritto trovato.</td></tr>'}
+function switchView(id){document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===id));if(id==='people')renderPeople()}
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.view)));
+function selectEvent(id){state.selectedEventId=id;document.getElementById('peopleEventFilter').value=id;saveState();switchView('people')}
+function openEvent(id=null){editingEventId=id;const e=id?state.events.find(x=>x.id===id):null;document.getElementById('eventDialogTitle').textContent=e?'Modifica evento':'Nuovo evento';document.getElementById('eventName').value=e?.name||'';document.getElementById('eventDate').value=e?.date||'';document.getElementById('eventTime').value=e?.time||'';document.getElementById('eventPlace').value=e?.place||'';document.getElementById('eventCapacity').value=e?.capacity??0;document.getElementById('eventPrice').value=e?.price??'';document.getElementById('eventNotes').value=e?.notes||'';document.getElementById('eventDialog').showModal()}
+window.editEvent=openEvent;window.deleteEvent=function(id){const e=state.events.find(x=>x.id===id);if(!e)return;if(confirm(`Eliminare “${e.name}” e tutte le sue iscrizioni?`)){state.events=state.events.filter(x=>x.id!==id);state.people=state.people.filter(p=>p.eventId!==id);if(state.selectedEventId===id)state.selectedEventId=state.events[0]?.id||null;saveState();toast('Evento eliminato')}};window.selectEvent=selectEvent;
+document.getElementById('eventForm').addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('eventName').value.trim(),date=document.getElementById('eventDate').value;if(!name||!date)return;const obj={id:editingEventId||uid('evt'),name,date,time:document.getElementById('eventTime').value,place:document.getElementById('eventPlace').value.trim(),capacity:Number(document.getElementById('eventCapacity').value)||0,price:document.getElementById('eventPrice').value,notes:document.getElementById('eventNotes').value.trim()};if(editingEventId){state.events=state.events.map(x=>x.id===editingEventId?obj:x)}else{state.events.push(obj);state.selectedEventId=obj.id}saveState();document.getElementById('eventDialog').close();toast(editingEventId?'Evento aggiornato':'Evento creato')});
+function openPerson(id=null){if(!state.events.length){toast('Crea prima un evento');openEvent();return}editingPersonId=id;const p=id?state.people.find(x=>x.id===id):null;document.getElementById('personDialogTitle').textContent=p?'Modifica iscritto':'Aggiungi iscritto';document.getElementById('personEvent').value=p?.eventId||state.selectedEventId||state.events[0].id;document.getElementById('personName').value=p?.name||'';document.getElementById('personPhone').value=p?.phone||'';document.getElementById('personEmail').value=p?.email||'';document.getElementById('personStatus').value=p?.status||'confirmed';document.getElementById('personPaid').value=p?.paid||'no';document.getElementById('personMember').value=p?.member||'no';document.getElementById('personDiet').value=p?.diet||'';document.getElementById('personNotes').value=p?.notes||'';document.getElementById('personDialog').showModal()}
+window.editPerson=openPerson;window.deletePerson=function(id){const p=state.people.find(x=>x.id===id);if(p&&confirm(`Eliminare ${p.name}?`)){state.people=state.people.filter(x=>x.id!==id);saveState();toast('Iscritto eliminato')}};
+document.getElementById('personForm').addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('personName').value.trim(),eventId=document.getElementById('personEvent').value;if(!name||!eventId)return;const obj={id:editingPersonId||uid('p'),eventId,name,phone:document.getElementById('personPhone').value.trim(),email:document.getElementById('personEmail').value.trim(),status:document.getElementById('personStatus').value,paid:document.getElementById('personPaid').value,member:document.getElementById('personMember').value,diet:document.getElementById('personDiet').value.trim(),notes:document.getElementById('personNotes').value.trim(),createdAt:editingPersonId?(state.people.find(x=>x.id===editingPersonId)?.createdAt||new Date().toISOString()):new Date().toISOString()};if(editingPersonId){state.people=state.people.map(x=>x.id===editingPersonId?obj:x)}else state.people.push(obj);state.selectedEventId=eventId;saveState();document.getElementById('personDialog').close();toast(editingPersonId?'Iscritto aggiornato':'Iscritto aggiunto')});
+['quickAddEvent','dashNewEvent','eventsNewEvent'].forEach(id=>document.getElementById(id).addEventListener('click',()=>openEvent()));['quickAddPerson','peopleAdd'].forEach(id=>document.getElementById(id).addEventListener('click',()=>openPerson()));
+document.getElementById('peopleEventFilter').addEventListener('change',e=>{state.selectedEventId=e.target.value;localStorage.setItem(STORAGE_KEY,JSON.stringify(state));renderPeople();renderEvents();renderSummary()});document.getElementById('peopleSearch').addEventListener('input',renderPeople);document.getElementById('statusFilter').addEventListener('change',renderPeople);
+function download(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+document.getElementById('exportJson').addEventListener('click',()=>download(`club42-backup-${new Date().toISOString().slice(0,10)}.json`,JSON.stringify(state,null,2),'application/json'));
+document.getElementById('exportCsv').addEventListener('click',()=>{const e=selectedEvent();if(!e){toast('Nessun evento selezionato');return}const rows=[['Nome','Telefono','Email','Stato','Socio','Pagamento','Esigenze alimentari','Note'],...eventPeople(e.id).map(p=>[p.name,p.phone,p.email,p.status,p.member,p.paid,p.diet,p.notes])];const csv=rows.map(r=>r.map(v=>'"'+String(v||'').replaceAll('"','""')+'"').join(';')).join('\n');download(`iscritti-${e.name.toLowerCase().replace(/[^a-z0-9]+/gi,'-')}.csv`,csv,'text/csv;charset=utf-8')});
+document.getElementById('importFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!Array.isArray(data.events)||!Array.isArray(data.people))throw new Error('Formato non valido');if(confirm('Sostituire i dati attuali con questo backup?')){state=data;saveState();toast('Backup importato')}}catch{alert('File di backup non valido.')}e.target.value=''});
+document.getElementById('resetData').addEventListener('click',()=>{if(confirm('Azzare tutti i dati? Questa azione non si può annullare.')){state={events:[],people:[],selectedEventId:null};saveState();toast('Dati azzerati')}});
+renderAll();
+</script>
+</body>
+</html>
